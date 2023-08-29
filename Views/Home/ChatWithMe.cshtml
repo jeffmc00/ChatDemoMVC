@@ -1,0 +1,76 @@
+﻿@{
+    ViewData["Title"] = "Chat Box UI Design";
+}
+
+<link rel="stylesheet" href="/css/style.css" />
+
+<!-- Import this CDN to use icons -->
+<link rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css" />
+
+<!-- Main container -->
+<div class="container">
+    <!-- msg-header section starts -->
+    <div class="msg-header">
+        <div class="container1">
+            
+            <div class="active">
+                <p>Chat With Me</p>
+            </div>
+        </div>
+    </div>
+    <!-- msg-header section ends -->
+    <!-- Chat inbox  -->
+    <div class="chat-page">
+        <div class="msg-inbox">
+            <div class="chats">
+                <!-- Message container -->
+                <div id="msg-page" class="msg-page">
+               
+                </div>
+            </div>
+
+            <!-- msg-bottom section -->
+
+            <div class="msg-bottom">
+                <div class="input-group">
+                    <input id="newmessage" type="text" class="form-control" placeholder="Write message..." />
+
+                    <span class="input-group-text send-icon">
+                        <i onclick="sendMessage()" class="bi bi-send"></i>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    
+    function sendMessage() {
+        var msgDiv = document.getElementById('msg-page');
+        var myMessage = document.getElementById('newmessage').value;
+        var currentdate = new Date();
+        var retMessage = ' <div class="outgoing-chats"><div class="outgoing-chats-img"><img src="/images/user1.png" /></div><div class="outgoing-msg"><div class="outgoing-chats-msg"><p>' + myMessage + '</p><span class="time">' + currentdate.toDateString() + ' : ' + currentdate.toTimeString() +  '</span></div></div></div>';
+
+        msgDiv.innerHTML += retMessage;
+
+        var url = "/Home/SendChatMessage";
+
+        $.post(url, { prompt:myMessage.toString() }, function (data) {
+          
+            console.log(data);
+            var responseDate = new Date();
+            var respMessage = ' <div class="received-chats"><div class="received-chats-img"><img src="/images/user2.png" /></div><div class="received-msg"><div class="received-msg-inbox"><p>' + data + '</p><span class="time">' + responseDate.toDateString() + ' : ' + responseDate.toTimeString() + '</span></div></div></div>'
+            msgDiv.innerHTML += respMessage;
+            document.getElementById('newmessage').value = "";
+
+        });
+
+
+    }
+
+</script>
+
+
